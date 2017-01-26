@@ -87,12 +87,12 @@ class MainPage(webapp2.RequestHandler):
 			self.write_form_4(email=this_email, error_email="That's not a valid email.")
 
 		if (validated_username and validated_password and (this_password == this_verify) and validated_email):
-			self.redirect('/success')
+			self.redirect('/welcome')
 
 
-class SuccessHandler(webapp2.RequestHandler):
-	def get(self):
-		self.response.out.write("Success! Your account has been created.")
+class Welcome(webapp2.RequestHandler):
+	def get(self, username):
+		self.response.out.write("Welcome, " + self.request.get("username"))
 
 
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
@@ -110,4 +110,4 @@ def valid_email(email):
 def escape_html(s):
 	return cgi.escape(s, quote=True)
 
-app = webapp2.WSGIApplication([('/', MainPage), ('/success', SuccessHandler)], debug=True)
+app = webapp2.WSGIApplication([('/', MainPage), ('/welcome', Welcome)], debug=True)
